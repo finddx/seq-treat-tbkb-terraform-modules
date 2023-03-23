@@ -9,6 +9,7 @@ resource "aws_security_group" "default" {
   vpc_id      = var.vpc_id
   tags = {
     Name        = "${local.prefix}-${each.value.name}"
+    Label       = "${local.prefix}-${each.value.name}"
     Environment = var.environment
   }
 
