@@ -4,7 +4,6 @@ locals {
 resource "aws_security_group" "default" {
   for_each = { for o in var.security_groups : o.name => o }
 
-  name_prefix = "${local.prefix}-${each.value.name}"
   description = each.value.description
   vpc_id      = var.vpc_id
   tags = {
