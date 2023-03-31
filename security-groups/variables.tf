@@ -42,3 +42,6 @@ variable "sg_rules" {
   }))
 }
 
+variable "default_tags" {
+  type = map(any)
+}

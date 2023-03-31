@@ -6,11 +6,10 @@ resource "aws_security_group" "default" {
 
   description = each.value.description
   vpc_id      = var.vpc_id
-  tags = {
+  tags = merge(var.default_tags, {
     Name        = "${local.prefix}-${each.value.name}"
     Label       = "${local.prefix}-${each.value.name}"
-    Environment = var.environment
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -38,5 +37,4 @@ resource "aws_security_group_rule" "default" {
   depends_on       = [aws_security_group.default]
   ipv6_cidr_blocks = each.value.self == null ? null : null
   prefix_list_ids  = []
-
 }
