@@ -1,50 +1,16 @@
-variable "name" {
-  type    = string
-  default = "bucket"
-}
-variable "acl" {
+variable "aws_account" {
+  description = "AWS account to use"
   type        = string
-  default     = "private"
-  description = "Defines is the bucket public or private"
 }
-variable "tags" {}
-
-variable "s3_bucket_encryption" {
-  default = "true"
-}
-
-variable "server_side_encryption_configuration" {
-  description = "Map containing server-side encryption configuration."
-  type        = any
-  default     = {}
+# variable "environment" {
+#   type        = string
+#   description = "the name of your environment (dev, uat, prod)"
+# }
+variable "bucket_name" {
+  type        = string
+  description = "Bucket name"
 }
 
-variable "website" {
-  description = "Map containing website hosting configuration."
-  type        = any
-  default     = {}
-}
-variable "s3_buckets" {
-  type = map(object({
-    enable_versioning = bool,
-    bucket_acl        = bool,
-    enable_cors       = bool,
-    cors_rule = any
-  }))
-#  default = {
-#    enable_versioning = false
-#    bucket_acl        = false
-#    enable_cors       = false
-#    cors_rule = [{
-#      allowed_methods = []
-#      allowed_headers = []
-#      allowed_origins = []
-#    }]
-#  }
-  default = {}
-}
+variable "policy" {
 
-
-variable "project_name" {}
-variable "environment" {}
-variable "module_name" {}
+}
