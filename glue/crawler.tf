@@ -1,5 +1,5 @@
 resource "aws_glue_crawler" "example" {
-  for_each = var.aws_glue_crawlers
+  for_each = var.glue_crawlers
   database_name = lookup(each.value, "database_name")
   name          = each.key
   role          = lookup(each.value, "role")
