@@ -7,6 +7,6 @@ variable "elb_dns_name" {}
 variable "frontend_port" {}
 variable "frontend_ssl_port" {}
 variable "whitelist" {
-    type = set(string)
-    default = []
+    type = any
+    default = {}
 }
