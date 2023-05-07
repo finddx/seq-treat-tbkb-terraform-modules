@@ -55,6 +55,10 @@ data "aws_iam_policy_document" "static_policy" {
     }
     sid = "4"
   }
+  depends_on = [
+    aws_s3_bucket.django_static,
+    aws_cloudfront_origin_access_identity.origin_access_identity
+  ]
 }
 
 data "aws_iam_policy_document" "django_static_policy" {
@@ -94,6 +98,10 @@ data "aws_iam_policy_document" "django_static_policy" {
     }
     sid = "4"
   }
+  depends_on = [
+    aws_s3_bucket.django_static,
+    aws_cloudfront_origin_access_identity.origin_access_identity
+  ]
 }
 
 resource "aws_cloudfront_origin_request_policy" "S3_request_policy" {
@@ -345,13 +353,13 @@ resource "aws_cloudfront_distribution" "this" {
   price_class = "PriceClass_100"
   # Restricts who is able to access this content
   restrictions {
-    #    geo_restriction {
-    #      # type of restriction, blacklist, whitelist or none
-    #      restriction_type = "none"
-    #    }
-    geo_restriction {
-      restriction_type = "whitelist"
-      locations        = var.whitelist
+    dynamic "geo_restriction" {
+      for_each = [var.whitelist]
+
+      content {
+        restriction_type =  "whitelist"
+        locations        = lookup(geo_restriction.value, "locations", [])
+      }
     }
   }
 
