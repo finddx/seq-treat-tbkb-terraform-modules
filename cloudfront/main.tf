@@ -16,7 +16,7 @@ resource "aws_s3_bucket_ownership_controls" "static_owner" {
   bucket = aws_s3_bucket.static.id
 
   rule {
-    object_ownership = "BucketOwnerPreferred"
+    object_ownership = "ObjectWriter"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_ownership_controls" "django_static_owner" {
   bucket = aws_s3_bucket.django_static.id
 
   rule {
-    object_ownership = "BucketOwnerPreferred"
+    object_ownership = "ObjectWriter"
   }
 }
 
@@ -251,7 +251,7 @@ resource "aws_s3_bucket_public_access_block" "private" {
 resource "aws_s3_bucket_ownership_controls" "logs_owner" {
   bucket = aws_s3_bucket.logs.id
   rule {
-    object_ownership = "BucketOwnerPreferred"
+    object_ownership = "ObjectWriter"
   }
 }
 resource "aws_s3_bucket_acl" "logs_acl" {
