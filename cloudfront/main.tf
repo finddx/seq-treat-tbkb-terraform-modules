@@ -7,6 +7,17 @@ resource "aws_s3_bucket" "static" {
 resource "aws_s3_bucket_acl" "static_acl" {
   bucket = aws_s3_bucket.static.id
   acl    = "private"
+  depends_on = [
+	aws_s3_bucket_ownership_controls.static_owner,
+  ]
+}
+
+resource "aws_s3_bucket_ownership_controls" "static_owner" {
+  bucket = aws_s3_bucket.static.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 resource "aws_s3_bucket" "django_static" {
@@ -16,6 +27,17 @@ resource "aws_s3_bucket" "django_static" {
 resource "aws_s3_bucket_acl" "django_static_acl" {
   bucket = aws_s3_bucket.django_static.id
   acl    = "private"
+  depends_on = [
+    aws_s3_bucket_ownership_controls.django_static_owner
+  ]
+}
+
+resource "aws_s3_bucket_ownership_controls" "django_static_owner" {
+  bucket = aws_s3_bucket.django_static.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 data "aws_iam_policy_document" "static_policy" {
@@ -225,9 +247,19 @@ resource "aws_s3_bucket_public_access_block" "private" {
   restrict_public_buckets = true
   ignore_public_acls      = true
 }
+
+resource "aws_s3_bucket_ownership_controls" "logs_owner" {
+  bucket = aws_s3_bucket.logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
 resource "aws_s3_bucket_acl" "logs_acl" {
   bucket = aws_s3_bucket.logs.id
   acl    = "private"
+  depends_on = [
+    aws_s3_bucket_ownership_controls.logs_owner
+  ]
 }
 
 ## CDN config
@@ -249,7 +281,7 @@ resource "aws_cloudfront_distribution" "this" {
     prefix          = ""
   }
 
-  aliases = ["${var.dns_name}"]
+  aliases = [var.dns_name]
 
   origin {
     domain_name = aws_s3_bucket.static.bucket_regional_domain_name
