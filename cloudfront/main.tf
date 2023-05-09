@@ -59,24 +59,6 @@ data "aws_iam_policy_document" "static_policy" {
     }
     sid = "2"
   }
-  statement {
-    actions   = ["s3:ListBucket"]
-    resources = ["${aws_s3_bucket.static.arn}"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Devops"]
-    }
-    sid = "3"
-  }
-  statement {
-    actions   = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
-    resources = ["${aws_s3_bucket.static.arn}/*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Devops"]
-    }
-    sid = "4"
-  }
   depends_on = [
     aws_s3_bucket.django_static,
     aws_cloudfront_origin_access_identity.origin_access_identity
@@ -101,24 +83,6 @@ data "aws_iam_policy_document" "django_static_policy" {
       identifiers = [aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn]
     }
     sid = "2"
-  }
-  statement {
-    actions   = ["s3:ListBucket"]
-    resources = ["${aws_s3_bucket.django_static.arn}"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Devops"]
-    }
-    sid = "3"
-  }
-  statement {
-    actions   = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
-    resources = ["${aws_s3_bucket.django_static.arn}/*"]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/Devops"]
-    }
-    sid = "4"
   }
   depends_on = [
     aws_s3_bucket.django_static,
