@@ -215,7 +215,7 @@ resource "aws_s3_bucket_public_access_block" "private" {
 resource "aws_s3_bucket_ownership_controls" "logs_owner" {
   bucket = aws_s3_bucket.logs.id
   rule {
-    object_ownership = "ObjectWriter"
+    object_ownership = "BucketOwnerPreferred"
   }
 }
 resource "aws_s3_bucket_acl" "logs_acl" {
