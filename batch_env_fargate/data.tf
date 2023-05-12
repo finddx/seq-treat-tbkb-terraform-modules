@@ -1,7 +1,7 @@
 data "aws_security_group" "default" {
   filter {
-    name  =  "tag:Name"
-    values = ["*-allow-outbound"]
+    name  =  "tag:Label"
+    values = ["*-allow-outbound-test"]
   }
 }
 
