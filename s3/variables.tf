@@ -29,18 +29,10 @@ variable "s3_buckets" {
     enable_versioning = bool,
     bucket_acl        = bool,
     enable_cors       = bool,
-    cors_rule = any
+    cors_rule = any,
+    enable_policy = bool,
+    policy = string
   }))
-#  default = {
-#    enable_versioning = false
-#    bucket_acl        = false
-#    enable_cors       = false
-#    cors_rule = [{
-#      allowed_methods = []
-#      allowed_headers = []
-#      allowed_origins = []
-#    }]
-#  }
   default = {}
 }
 
