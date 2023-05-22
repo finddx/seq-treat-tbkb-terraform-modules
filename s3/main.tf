@@ -1,9 +1,10 @@
 locals {
-  prefix    = "${var.project_name}-${var.module_name}-${var.environment}"
+  prefix = "${var.project_name}-${var.module_name}-${var.environment}"
 }
 
 resource "aws_s3_bucket" "default" {
   for_each      = var.s3_buckets
+  bucket        = "${local.prefix}-${each.key}"
   force_destroy = lookup(each.value, "force_destroy", false)
 }
 
@@ -28,6 +29,22 @@ resource "aws_s3_bucket_versioning" "default" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "default" {
+  for_each = {
+    for key, value in var.s3_buckets : key => value
+    if contains(keys(value), "public_access_block" )
+  }
+  bucket = aws_s3_bucket.default[each.key].id
+  block_public_acls       = false
+  block_public_policy     = false
+  restrict_public_buckets = false
+  ignore_public_acls      = false
+  lifecycle {
+    prevent_destroy = false
+  }
+
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
   for_each = var.s3_buckets
   bucket   = aws_s3_bucket.default[each.key].id
@@ -41,13 +58,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 resource "aws_s3_bucket_cors_configuration" "cors" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if value.enable_cors
+    if value.enable_cors == true
   }
   bucket = aws_s3_bucket.default[each.key].id
   dynamic "cors_rule" {
-    for_each =   {
-    for key, value in var.s3_buckets[each.key].cors_rule : key => value
-  }
+    for_each = {
+      for key, value in var.s3_buckets[each.key].cors_rule : key => value
+    }
 
     content {
       id              = try(cors_rule.value.id, null)
@@ -58,4 +75,16 @@ resource "aws_s3_bucket_cors_configuration" "cors" {
       max_age_seconds = try(cors_rule.value.max_age_seconds, null)
     }
   }
+}
+
+resource "aws_s3_bucket_policy" "this" {
+  for_each = {
+    for key, value in var.s3_buckets : key => value
+      if value.enable_policy ==  true
+  }
+  bucket = aws_s3_bucket.default[each.key].id
+  policy   =  each.value.policy
+  depends_on = [
+    aws_s3_bucket_public_access_block.default
+  ]
 }
