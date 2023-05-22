@@ -4,7 +4,7 @@ locals {
 
 resource "aws_s3_bucket" "default" {
   for_each      = var.s3_buckets
-  bucket        = each.key
+  bucket        = "${local.prefix}-${each.key}"
   force_destroy = lookup(each.value, "force_destroy", false)
 }
 
