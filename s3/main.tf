@@ -32,7 +32,7 @@ resource "aws_s3_bucket_versioning" "default" {
 resource "aws_s3_bucket_public_access_block" "default" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if contains(keys(value) "public_access_block" )
+    if contains(keys(value), "public_access_block" )
   }
   bucket = aws_s3_bucket.default[each.key].id
   block_public_acls       = false
