@@ -12,10 +12,22 @@ resource "aws_s3_bucket" "default" {
 resource "aws_s3_bucket_acl" "default" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if value.bucket_acl == true
+    if (value.bucket_acl  == true && value.bucket_owner_acl ==false)
   }
   bucket = aws_s3_bucket.default[each.key].id
   acl    = "private"
+}
+
+resource "aws_s3_bucket_acl" "bucket_owner" {
+  for_each = {
+    for key, value in var.s3_buckets : key => value
+    if (value.bucket_acl  == true && value.bucket_owner_acl == true)
+  }
+  bucket = aws_s3_bucket.default[each.key].id
+  acl    = "private"
+  depends_on = [
+    aws_s3_bucket_ownership_controls.owner
+  ]
 }
 
 resource "aws_s3_bucket_versioning" "default" {
@@ -32,7 +44,7 @@ resource "aws_s3_bucket_versioning" "default" {
 resource "aws_s3_bucket_public_access_block" "default" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if contains(keys(value), "public_access_block" )
+    if value.bucket_owner_acl == true
   }
   bucket = aws_s3_bucket.default[each.key].id
   block_public_acls       = false
@@ -85,6 +97,18 @@ resource "aws_s3_bucket_policy" "this" {
   bucket = aws_s3_bucket.default[each.key].id
   policy   =  each.value.policy
   depends_on = [
-    aws_s3_bucket_public_access_block.default
+    aws_s3_bucket_public_access_block.default,
+    aws_s3_bucket.default
   ]
+}
+
+resource "aws_s3_bucket_ownership_controls" "owner" {
+  for_each = {
+    for key, value in var.s3_buckets : key => value
+      if value.enable_policy ==  true
+  }
+  bucket = aws_s3_bucket.default[each.key].id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
