@@ -31,6 +31,7 @@ variable "s3_buckets" {
     enable_cors       = bool,
     cors_rule = any,
     enable_policy = bool,
+    bucket_owner_acl = bool,
     policy = string
   }))
   default = {}
