@@ -6,7 +6,7 @@ resource "aws_batch_job_definition" "this" {
   platform_capabilities = [
     "EC2",
   ]
-  retry_strategy = {
+  retry_strategy {
     attempts = 5
     evaluate_on_exit = [
       {
