@@ -8,12 +8,14 @@ resource "aws_batch_job_definition" "this" {
   ]
   retry_strategy {
     attempts = 5
-    evaluate_on_exit = [
-      {
-        on_status_reason = "Host EC2*",
-        action           = "RETRY"
-      }
-    ]
+    evaluate_on_exit {
+      on_status_reason = "Host EC2*"
+      action           = "RETRY"
+    }
+    evaluate_on_exit {
+      on_reason = "*"
+      action    = "EXIT"
+    }
   }
 
   container_properties = jsonencode({
