@@ -8,7 +8,7 @@ resource "aws_s3_bucket_acl" "static_acl" {
   bucket = aws_s3_bucket.static.id
   acl    = "private"
   depends_on = [
-	aws_s3_bucket_ownership_controls.static_owner,
+    aws_s3_bucket_ownership_controls.static_owner,
   ]
 }
 
@@ -349,13 +349,9 @@ resource "aws_cloudfront_distribution" "this" {
   price_class = "PriceClass_100"
   # Restricts who is able to access this content
   restrictions {
-    dynamic "geo_restriction" {
-      for_each = [var.whitelist]
-
-      content {
-        restriction_type =  "whitelist"
-        locations        = lookup(geo_restriction.value, "locations", [])
-      }
+    geo_restriction {
+      restriction_type = lookup(var.restrictions, "type", "none")
+      locations        = lookup(var.restrictions, "locations", [])
     }
   }
 

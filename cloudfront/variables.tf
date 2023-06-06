@@ -6,7 +6,7 @@ variable "dns_name" {}
 variable "elb_dns_name" {}
 variable "frontend_port" {}
 variable "frontend_ssl_port" {}
-variable "whitelist" {
-    type = any
-    default = {}
+variable "restrictions" {
+  type    = any
+  default = {}
 }
