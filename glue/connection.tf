@@ -5,8 +5,7 @@ resource "aws_glue_connection" "this" {
   connection_type = lookup(each.value, "connection_type", "JDBC")
   connection_properties = {
     JDBC_CONNECTION_URL = lookup(each.value, "jdbc_connection_url")
-    PASSWORD            = lookup(each.value, "password", "")
-    USERNAME            = lookup(each.value, "username", "")
+    SECRET_ID           = lookup(each.value, "secret_id", "")
   }
 
   physical_connection_requirements {
@@ -14,5 +13,5 @@ resource "aws_glue_connection" "this" {
     security_group_id_list = lookup(each.value, "security_group_id_list", [])
     subnet_id              = lookup(each.value, "subnet_id")
   }
-  tags = lookup(each.value, "tags",{})
+  tags = lookup(each.value, "tags", {})
 }
