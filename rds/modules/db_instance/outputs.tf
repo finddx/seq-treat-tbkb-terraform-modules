@@ -89,14 +89,9 @@ output "db_instance_domain_iam_role_name" {
   value       = try(aws_db_instance.this[0].domain_iam_role_name, "")
 }
 
-output "managed_secret_credentials_arn" {
+output "db_managed_secret_credentials" {
   description = "The RDS Managed Secret holding db credentials."
-  value       = try(aws_db_instance.this[0].master_user_secret.secret_arn, "")
-}
-
-output "managed_secret_credentials_encryption_key" {
-  description = "The KMS encrypting the Managed Secret holding db credentials."
-  value       = try(aws_db_instance.this[0].master_user_secret.kms_key_id, "")
+  value       = try(aws_db_instance.this[0].master_user_secret, "")
 }
 
 ################################################################################
