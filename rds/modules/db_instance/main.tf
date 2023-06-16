@@ -11,7 +11,6 @@ locals {
 
   # Replicas will use source metadata
   username       = var.replicate_source_db != null ? null : var.username
-  password       = var.replicate_source_db != null ? null : var.password
   engine         = var.replicate_source_db != null ? null : var.engine
   engine_version = var.replicate_source_db != null ? null : var.engine_version
 }
@@ -46,7 +45,7 @@ resource "aws_db_instance" "this" {
 
   db_name                             = var.db_name
   username                            = local.username
-  password                            = local.password
+  manage_master_user_password         = true
   port                                = var.port
   domain                              = var.domain
   domain_iam_role_name                = var.domain_iam_role_name
