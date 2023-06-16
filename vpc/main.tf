@@ -32,8 +32,6 @@ resource "aws_vpc" "this" {
   instance_tenancy               = var.instance_tenancy
   enable_dns_hostnames           = var.enable_dns_hostnames
   enable_dns_support             = var.enable_dns_support
-  enable_classiclink             = null # https://github.com/hashicorp/terraform/issues/31730
-  enable_classiclink_dns_support = null # https://github.com/hashicorp/terraform/issues/31730
 
   tags = merge(
     { "Name" = var.name },
@@ -1008,7 +1006,7 @@ locals {
 resource "aws_eip" "nat" {
   count = local.create_vpc && var.enable_nat_gateway && false == var.reuse_nat_ips ? local.nat_gateway_count : 0
 
-  vpc = true
+  domain = "vpc"
 
   tags = merge(
     {
@@ -1241,7 +1239,6 @@ resource "aws_default_vpc" "this" {
 
   enable_dns_support   = var.default_vpc_enable_dns_support
   enable_dns_hostnames = var.default_vpc_enable_dns_hostnames
-  enable_classiclink   = null # https://github.com/hashicorp/terraform/issues/31730
 
   tags = merge(
     { "Name" = coalesce(var.default_vpc_name, "default") },
