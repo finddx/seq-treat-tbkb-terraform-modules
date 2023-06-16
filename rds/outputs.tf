@@ -69,10 +69,14 @@ output "db_instance_username" {
   sensitive   = true
 }
 
-output "db_instance_password" {
-  description = "The database password (this password may be old, because Terraform doesn't track it after initial creation)"
-  value       = local.password
-  sensitive   = true
+output "db_managed_secret_credentials_arn" {
+  description = "The RDS Managed Secret holding db credentials."
+  value       = module.db_instance.db_managed_secret_credentials[0].secret_arn
+}
+
+output "db_managed_secret_credentials_encryption_key" {
+  description = "The RDS Managed Secret holding db credentials."
+  value       = module.db_instance.db_managed_secret_credentials[0].kms_key_id
 }
 
 output "db_instance_domain" {
