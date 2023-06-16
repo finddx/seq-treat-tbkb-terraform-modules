@@ -1,4 +1,4 @@
-output "batch_compute_environment_arn" {
+output "arn" {
   value = aws_batch_compute_environment.this.arn
 }
 # output "batch_instance_profile_arn" {

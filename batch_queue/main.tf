@@ -1,11 +1,11 @@
-resource "aws_batch_job_queue" "ec2" {
-  name     = "${var.environment}-${var.type}"
+resource "aws_batch_job_queue" "this" {
+  name     = var.queue_name
   state    = "ENABLED"
   priority = 1
   compute_environments = [
     var.compute_environments
   ]
   tags = {
-    Name = var.batch_name
+    Name = var.queue_name
   }
 }

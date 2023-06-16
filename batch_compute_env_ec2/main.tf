@@ -2,7 +2,7 @@ resource "aws_batch_compute_environment" "this" {
   compute_environment_name = var.compute_env_name
   compute_resources {
 
-    type                = var.type
+    type                = "EC2"
     instance_role       = var.instance_profile
     min_vcpus           = 0
     max_vcpus           = 5000
@@ -19,10 +19,10 @@ resource "aws_batch_compute_environment" "this" {
     }
   }
 
-  service_role = var.role_arn
+  service_role = var.service_role_arn
   type         = "MANAGED"
   state        = "ENABLED"
-  depends_on   = [var.role]
+  depends_on   = [var.service_role_name]
 
   tags = {
     Name = var.batch_name
