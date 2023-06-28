@@ -6,8 +6,8 @@ resource "aws_batch_compute_environment" "this" {
     min_vcpus          = 0
     max_vcpus          = 5000
     desired_vcpus      = 0
-    security_group_ids = [data.aws_security_group.default.id]
-    subnets            = [data.aws_subnet.private_subnet.id]
+    security_group_ids = [var.security_group_id]
+    subnets            = var.subnet_ids
   }
 
   service_role = var.service_role_arn
