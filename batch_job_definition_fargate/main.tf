@@ -20,6 +20,9 @@ resource "aws_batch_job_definition" "this" {
         value = tostring(lookup(each.value, "container_memory"))
       }
     ]
+    networkConfiguration = {
+      assignPublicIp = lookup(each.value, "assignPublicIp", "DISABLED")
+    }
   })
 
   tags = {

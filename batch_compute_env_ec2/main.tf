@@ -11,8 +11,8 @@ resource "aws_batch_compute_environment" "this" {
     instance_type = [
       "optimal",
     ]
-    security_group_ids = [data.aws_security_group.default.id]
-    subnets            = [data.aws_subnet.public_subnet.id]
+    security_group_ids = [var.security_group_id]
+    subnets            = var.subnet_ids
     launch_template {
       launch_template_name = aws_launch_template.main_template.name
       version              = 1
@@ -35,7 +35,7 @@ resource "aws_batch_compute_environment" "this" {
 
 resource "aws_launch_template" "main_template" {
   image_id               = "ami-0f260fe26c2826a3d"
-  vpc_security_group_ids = [data.aws_security_group.default.id]
+  vpc_security_group_ids = [var.security_group_id]
   instance_type          = "t2.micro"
   block_device_mappings {
     device_name = "/dev/xvda"

@@ -8,3 +8,11 @@ variable "instance_profile" {}
 variable "desired_vcpus" {
   default = 0
 }
+
+variable "subnet_ids" {
+  type = list(any)
+}
+
+variable "security_group_id" {
+  type = string
+}
