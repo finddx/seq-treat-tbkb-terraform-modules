@@ -94,14 +94,14 @@ resource "aws_lb_target_group" "tf_target_group" {
 resource "aws_lb_listener" "listener_http_to_https" {
   for_each          = toset(var.http_to_https)
   load_balancer_arn = aws_lb.tf_lb[each.key].arn
-  port              = "80"
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
     type = "redirect"
 
     redirect {
-      port        = "443"
+      port        = 443
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
