@@ -1,8 +1,3 @@
-output "security_group" {
-  value       = local.security_groups
-  description = "List of Security Groups"
-}
-
 output "security_group_id" {
   value = {
     for name, list in aws_security_group.default :
