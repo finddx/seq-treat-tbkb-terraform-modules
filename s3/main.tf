@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "default" {
 resource "aws_s3_bucket_acl" "default" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if (value.bucket_acl  == true && value.bucket_owner_acl ==false)
+    if(value.bucket_acl == true && value.bucket_owner_acl == false)
   }
   bucket = aws_s3_bucket.default[each.key].id
   acl    = "private"
@@ -21,7 +21,7 @@ resource "aws_s3_bucket_acl" "default" {
 resource "aws_s3_bucket_acl" "bucket_owner" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-    if (value.bucket_acl  == true && value.bucket_owner_acl == true)
+    if(value.bucket_acl == true && value.bucket_owner_acl == true)
   }
   bucket = aws_s3_bucket.default[each.key].id
   acl    = "private"
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_public_access_block" "default" {
     for key, value in var.s3_buckets : key => value
     if value.bucket_owner_acl == true
   }
-  bucket = aws_s3_bucket.default[each.key].id
+  bucket                  = aws_s3_bucket.default[each.key].id
   block_public_acls       = false
   block_public_policy     = false
   restrict_public_buckets = false
@@ -92,10 +92,10 @@ resource "aws_s3_bucket_cors_configuration" "cors" {
 resource "aws_s3_bucket_policy" "this" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-      if value.enable_policy ==  true
+    if value.enable_policy == true
   }
   bucket = aws_s3_bucket.default[each.key].id
-  policy   =  each.value.policy
+  policy = each.value.policy
   depends_on = [
     aws_s3_bucket_public_access_block.default,
     aws_s3_bucket.default
@@ -105,10 +105,28 @@ resource "aws_s3_bucket_policy" "this" {
 resource "aws_s3_bucket_ownership_controls" "owner" {
   for_each = {
     for key, value in var.s3_buckets : key => value
-      if value.enable_policy ==  true
+    if value.enable_policy == true
   }
   bucket = aws_s3_bucket.default[each.key].id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
+}
+
+resource "aws_s3_bucket_notification" "notification" {
+  bucket = aws_s3_bucket.default[each.key].id
+  for_each = {
+    for key, value in var.s3_buckets : key => value
+    if value.enable_notification == true
+  }
+  dynamic "queue" {
+    for_each = {
+      for key, value in var.s3_buckets[each.key].notification_rule : key => value
+    }
+    content {
+      events    = [try(queue.value.events)]
+      queue_arn = try(queue.value.queue_arn)
+    }
+  }
+
 }

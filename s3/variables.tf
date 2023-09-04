@@ -29,6 +29,8 @@ variable "s3_buckets" {
     enable_versioning = bool,
     bucket_acl        = bool,
     enable_cors       = bool,
+    enable_notification = bool,
+    notification_rule = any,
     cors_rule = any,
     enable_policy = bool,
     bucket_owner_acl = bool,
