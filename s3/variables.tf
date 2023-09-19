@@ -26,19 +26,18 @@ variable "website" {
 }
 variable "s3_buckets" {
   type = map(object({
-    enable_versioning = bool,
-    bucket_acl        = bool,
-    enable_cors       = bool,
-    cors_rule = any,
+    enable_versioning   = bool,
+    bucket_acl          = bool,
+    enable_cors         = bool,
+    cors_rule           = any,
     enable_notification = bool,
-    notification_rule = any,
-    enable_policy = bool,
-    bucket_owner_acl = bool,
-    policy = string
+    notification_rule   = any,
+    enable_policy       = bool,
+    bucket_owner_acl    = bool,
+    policy              = string
   }))
   default = {}
 }
-
 
 variable "project_name" {}
 variable "environment" {}

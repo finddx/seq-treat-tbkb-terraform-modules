@@ -124,8 +124,9 @@ resource "aws_s3_bucket_notification" "notification" {
       for key, value in var.s3_buckets[each.key].notification_rule : key => value
     }
     content {
-      events    = queue.value.events
-      queue_arn = queue.value.queue_arn
+      events        = queue.value.events
+      queue_arn     = queue.value.queue_arn
+      filter_prefix = queue.value.filter_prefix
     }
   }
 }
