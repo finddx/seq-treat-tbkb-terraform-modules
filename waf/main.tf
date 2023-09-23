@@ -2,6 +2,7 @@ data "aws_cloudfront_distribution" "cf" {
   id = var.cf_distribution_id
 }
 
+
 output "cloudfront_arn" {
   value = data.aws_cloudfront_distribution.cf.arn
 }
