@@ -1,11 +1,11 @@
 data "aws_cloudfront_distribution" "cf" {
   id = var.cf_distribution_id
 }
-
-
 output "cloudfront_arn" {
   value = data.aws_cloudfront_distribution.cf.arn
 }
+
+
 
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
   name ="acl1"
