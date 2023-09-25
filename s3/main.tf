@@ -112,21 +112,3 @@ resource "aws_s3_bucket_ownership_controls" "owner" {
     object_ownership = "BucketOwnerPreferred"
   }
 }
-
-resource "aws_s3_bucket_notification" "notification" {
-  bucket = aws_s3_bucket.default[each.key].id
-  for_each = {
-    for key, value in var.s3_buckets : key => value
-    if value.enable_notification == true
-  }
-  dynamic "queue" {
-    for_each = {
-      for key, value in var.s3_buckets[each.key].notification_rule : key => value
-    }
-    content {
-      events        = queue.value.events
-      queue_arn     = queue.value.queue_arn
-      filter_prefix = queue.value.filter_prefix
-    }
-  }
-}
