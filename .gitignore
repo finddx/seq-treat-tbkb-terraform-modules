@@ -7,6 +7,9 @@ cfn/
 *.csv
 *.code-workspace
 
+#MacOS garbage
+.DStore
+
 # AWS Lambda Function creates BUILD dir
 builds
 

@@ -24,6 +24,10 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
+    override_action {
+      count {}
+    }
+
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
@@ -62,7 +66,11 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 10
+    priority = 30
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -82,7 +90,11 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 
      rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 11
+    priority = 40
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -100,7 +112,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 }
 
 resource "aws_wafv2_web_acl_association" "waf_acl_association_cf" {
-  resource_arn = cf.cloudfront_arn
+  resource_arn = "${data.aws_cloudfront_distribution.cf.arn}"
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_cf.arn
 }
 
@@ -124,7 +136,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
     rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 10
+    priority = 50
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -143,7 +159,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 20
+    priority = 60
 
     override_action {
       count {}
@@ -164,7 +180,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 10
+    priority = 70
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -184,7 +204,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
      rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 10
+    priority = 80
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -202,7 +226,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 }
 
 resource "aws_wafv2_web_acl_association" "waf_acl_association_lb" {
-  resource_arn = var.lb_arn
+  resource_arn = "${var.lb_arn.arn}"
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_lb.arn
 }
 
