@@ -110,12 +110,12 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     }
   }
 }
-
+/*
 resource "aws_wafv2_web_acl_association" "waf_acl_association_cf" {
   resource_arn = "${data.aws_cloudfront_distribution.cf.arn}"
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_cf.arn
 }
-
+*/
 
 
 ########################################################################################################
