@@ -7,7 +7,7 @@ output "cloudfront_arn" {
 
 
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
-  name ="acl1"
+  name ="acl0"
   description ="WAF Web ACL"
   scope = "CLOUDFRONT"
   default_action {
