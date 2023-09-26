@@ -246,6 +246,8 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   aliases = [var.dns_name]
+  
+  web_acl_id = aws_wafv2_web_acl.waf_acl_cf.arn
 
   origin {
     domain_name = aws_s3_bucket.static.bucket_regional_domain_name
