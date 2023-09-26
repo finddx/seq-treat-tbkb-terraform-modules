@@ -226,7 +226,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 }
 
 resource "aws_wafv2_web_acl_association" "waf_acl_association_lb" {
-  resource_arn = "${var.lb_arn.arn}"
+  resource_arn = "${var.lb_arn}"
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_lb.arn
 }
 
