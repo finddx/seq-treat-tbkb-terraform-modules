@@ -246,9 +246,6 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   aliases = [var.dns_name]
-  
-  web_acl_id = aws_wafv2_web_acl.waf_acl_cf.arn #ARN of WEB ACL on WAF side (required)
-
 
   web_acl_id = var.waf_web_acl_id
 
