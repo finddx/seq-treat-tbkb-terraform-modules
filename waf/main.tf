@@ -1,26 +1,19 @@
-data "aws_cloudfront_distribution" "cf" {
-  id = var.cf_distribution_id
-}
-output "cloudfront_arn" {
-  value = data.aws_cloudfront_distribution.cf.arn
-}
-
-#CloudFront
+#CloudFront web acl
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
-  name ="acl0"
-  description ="WAF Web ACL"
-  scope = "CLOUDFRONT"
+  name        = "acl_cf"
+  description = "WAF Web ACL for cloudfront"
+  scope       = "CLOUDFRONT"
   default_action {
     allow {}
   }
   visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "cf-waf-metric"
-      sampled_requests_enabled   = false
-    }
+    cloudwatch_metrics_enabled = false
+    metric_name                = "cf-waf-metric"
+    sampled_requests_enabled   = false
+  }
 
 
-    rule {
+  rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
@@ -88,7 +81,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 
 
 
-     rule {
+  rule {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 40
 
@@ -115,20 +108,20 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 
 #Load Balancer
 resource "aws_wafv2_web_acl" "waf_acl_lb" {
-  name ="acl1"
-  description ="WAF Web ACL"
-  scope = "REGIONAL"
+  name        = "acl_lb_1"
+  description = "WAF Web ACL for the load balancer"
+  scope       = "REGIONAL"
   default_action {
     allow {}
   }
   visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "lb-waf-metric"
-      sampled_requests_enabled   = false
-    }
+    cloudwatch_metrics_enabled = false
+    metric_name                = "lb-waf-metric"
+    sampled_requests_enabled   = false
+  }
 
 
-    rule {
+  rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 50
 
@@ -196,7 +189,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
 
 
-     rule {
+  rule {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 80
 
@@ -220,6 +213,6 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 }
 
 resource "aws_wafv2_web_acl_association" "waf_acl_association_lb" {
-  resource_arn = "${var.lb_arn}"
+  resource_arn = var.lb_arn
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_lb.arn
 }
