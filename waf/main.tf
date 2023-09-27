@@ -1,26 +1,18 @@
-data "aws_cloudfront_distribution" "cf" {
-  id = var.cf_distribution_id
-}
-output "cloudfront_arn" {
-  value = data.aws_cloudfront_distribution.cf.arn
-}
-
-
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
-  name ="acl1"
-  description ="WAF Web ACL"
-  scope = "CLOUDFRONT"
+  name        = "acl_cf1"
+  description = "WAF Web ACL for Cloudfront"
+  scope       = "CLOUDFRONT"
   default_action {
     allow {} #temporarily allows everything, replace it with block {} when needed 
   }
   visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "cf-waf-metric"
-      sampled_requests_enabled   = false
-    }
+    cloudwatch_metrics_enabled = false
+    metric_name                = "cf-waf-metric"
+    sampled_requests_enabled   = false
+  }
 
 
-    rule {
+  rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
@@ -62,7 +54,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 10
+    priority = 30
 
     statement {
       managed_rule_group_statement {
@@ -80,9 +72,9 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 
 
 
-     rule {
+  rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 10
+    priority = 40
 
     statement {
       managed_rule_group_statement {
@@ -99,30 +91,23 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   }
 }
 
-resource "aws_wafv2_web_acl_association" "waf_acl_association_cf" {
-  resource_arn = cf.cloudfront_arn
-  web_acl_arn  = aws_wafv2_web_acl.waf_acl_cf.arn
-}
-
-
-
 ########################################################################################################
 
 resource "aws_wafv2_web_acl" "waf_acl_lb" {
-  name ="acl1"
-  description ="WAF Web ACL"
-  scope = "REGIONAL"
+  name        = "acl_lb1"
+  description = "WAF Web ACL for the Load Balancer"
+  scope       = "REGIONAL"
   default_action {
     allow {} #temporarily allows everything, replace it with block {} when needed 
   }
   visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "lb-waf-metric"
-      sampled_requests_enabled   = false
-    }
+    cloudwatch_metrics_enabled = false
+    metric_name                = "lb-waf-metric"
+    sampled_requests_enabled   = false
+  }
 
 
-    rule {
+  rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
 
@@ -164,7 +149,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 10
+    priority = 30
 
     statement {
       managed_rule_group_statement {
@@ -182,9 +167,9 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
 
 
-     rule {
+  rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 10
+    priority = 40
 
     statement {
       managed_rule_group_statement {
