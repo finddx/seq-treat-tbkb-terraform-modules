@@ -1,9 +1,10 @@
+#CloudFront web acl
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
   name        = "acl_cf"
   description = "WAF Web ACL for Cloudfront"
   scope       = "CLOUDFRONT"
   default_action {
-    allow {} #temporarily allows everything, replace it with block {} when needed 
+    allow {}
   }
   visibility_config {
     cloudwatch_metrics_enabled = false
@@ -15,6 +16,10 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 10
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -56,6 +61,10 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     name     = "AWSManagedRulesAmazonIpReputationList"
     priority = 30
 
+    override_action {
+      count {}
+    }
+
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAmazonIpReputationList"
@@ -75,6 +84,10 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 40
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -91,14 +104,15 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
   }
 }
 
-########################################################################################################
 
+
+#Load Balancer
 resource "aws_wafv2_web_acl" "waf_acl_lb" {
   name        = "acl_lb"
-  description = "WAF Web ACL for the Load Balancer"
+  description = "WAF Web ACL for the load balancer"
   scope       = "REGIONAL"
   default_action {
-    allow {} #temporarily allows everything, replace it with block {} when needed 
+    allow {}
   }
   visibility_config {
     cloudwatch_metrics_enabled = false
@@ -109,7 +123,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 10
+    priority = 50
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -128,7 +146,7 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 20
+    priority = 60
 
     override_action {
       count {}
@@ -149,7 +167,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 30
+    priority = 70
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -169,7 +191,11 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 40
+    priority = 80
+
+    override_action {
+      count {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -190,7 +216,3 @@ resource "aws_wafv2_web_acl_association" "waf_acl_association_lb" {
   resource_arn = var.lb_arn
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_lb.arn
 }
-
-
-
-########################################################################################################
