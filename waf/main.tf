@@ -5,13 +5,13 @@ output "cloudfront_arn" {
   value = data.aws_cloudfront_distribution.cf.arn
 }
 
-
+#CloudFront
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
   name ="acl0"
   description ="WAF Web ACL"
   scope = "CLOUDFRONT"
   default_action {
-    allow {} #temporarily allows everything, replace it with block {} when needed 
+    allow {}
   }
   visibility_config {
       cloudwatch_metrics_enabled = false
@@ -110,22 +110,16 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     }
   }
 }
-/*
-resource "aws_wafv2_web_acl_association" "waf_acl_association_cf" {
-  resource_arn = "${data.aws_cloudfront_distribution.cf.arn}"
-  web_acl_arn  = aws_wafv2_web_acl.waf_acl_cf.arn
-}
-*/
 
 
-########################################################################################################
 
+#Load Balancer
 resource "aws_wafv2_web_acl" "waf_acl_lb" {
   name ="acl1"
   description ="WAF Web ACL"
   scope = "REGIONAL"
   default_action {
-    allow {} #temporarily allows everything, replace it with block {} when needed 
+    allow {}
   }
   visibility_config {
       cloudwatch_metrics_enabled = false
@@ -229,7 +223,3 @@ resource "aws_wafv2_web_acl_association" "waf_acl_association_lb" {
   resource_arn = "${var.lb_arn}"
   web_acl_arn  = aws_wafv2_web_acl.waf_acl_lb.arn
 }
-
-
-
-########################################################################################################
