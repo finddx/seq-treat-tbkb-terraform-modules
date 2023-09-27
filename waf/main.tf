@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
-  name        = "acl_cf1"
+  name        = "acl_cf"
   description = "WAF Web ACL for Cloudfront"
   scope       = "CLOUDFRONT"
   default_action {
@@ -94,7 +94,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
 ########################################################################################################
 
 resource "aws_wafv2_web_acl" "waf_acl_lb" {
-  name        = "acl_lb1"
+  name        = "acl_lb"
   description = "WAF Web ACL for the Load Balancer"
   scope       = "REGIONAL"
   default_action {
