@@ -247,6 +247,8 @@ resource "aws_cloudfront_distribution" "this" {
 
   aliases = [var.dns_name]
 
+  web_acl_id = var.waf_web_acl_id
+
   origin {
     domain_name = aws_s3_bucket.static.bucket_regional_domain_name
     origin_id   = "S3-${aws_s3_bucket.static.bucket}"
