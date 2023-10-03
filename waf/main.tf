@@ -18,7 +18,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     priority = 10
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -41,7 +41,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     priority = 20
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -62,7 +62,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     priority = 30
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -86,7 +86,7 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
     priority = 40
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -123,10 +123,10 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 50
+    priority = 10
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -146,10 +146,10 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 60
+    priority = 20
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -167,10 +167,10 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
   }
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 70
+    priority = 30
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -191,10 +191,10 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
 
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 80
+    priority = 40
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
