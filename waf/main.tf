@@ -1,6 +1,14 @@
+#WAF for Cloudfront can only occur in us-east-1
+#So we define a provider so
+provider "aws" {
+  alias  = "useast1"
+  region = "us-east-1"
+}
+
 #CloudFront web acl
 resource "aws_wafv2_web_acl" "waf_acl_cf" {
-  name        = "acl_cf"
+  provider    = aws.useast1
+  name        = format("acl_cf-%s", replace(var.cf_domain, ".", ""))
   description = "WAF Web ACL for Cloudfront"
   scope       = "CLOUDFRONT"
   default_action {
