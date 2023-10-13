@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "django_static_policy" {
 }
 
 resource "aws_cloudfront_origin_request_policy" "S3_request_policy" {
-  name    = "S3_request_policy"
+  name    = "S3_request_policy-${var.project_name}-${var.environment}"
   comment = "S3 request policy for CDN"
   cookies_config {
     cookie_behavior = "none"
@@ -114,7 +114,7 @@ resource "aws_cloudfront_origin_request_policy" "S3_request_policy" {
 }
 
 resource "aws_cloudfront_cache_policy" "S3_cache_policy" {
-  name        = "S3_cache_policy"
+  name        = "S3_cache_policy-${var.project_name}-${var.environment}"
   comment     = "S3 cache policy for CDN"
   default_ttl = 86400
   max_ttl     = 31536000

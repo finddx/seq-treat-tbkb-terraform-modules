@@ -11,3 +11,5 @@ variable "restrictions" {
   type    = any
   default = {}
 }
+variable "project_name" {}
+variable "environment" {}
