@@ -1,28 +1,24 @@
 variable "glue_classifier" {
-  type = any
+  type    = any
   default = {}
 }
 
 variable "glue_connection" {
-  type = any
+  type    = any
   default = {}
 }
 
-variable "region" {
-  default = "us-east-1"
-}
-
 variable "glue_databases" {
-  type = any
+  type    = any
   default = {}
 }
 
 variable "glue_crawlers" {
-  type = any
+  type    = any
   default = {}
 }
 
 variable "glue_jobs" {
-  type = any
+  type    = any
   default = {}
 }
