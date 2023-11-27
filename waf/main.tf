@@ -33,7 +33,16 @@ resource "aws_wafv2_web_acl" "waf_acl_cf" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+        rule_action_override {
+          action_to_use {
+            allow {}
+          }
+
+          name = "SizeRestrictions_BODY"
+        }
+
       }
+
     }
 
     visibility_config {
@@ -141,6 +150,13 @@ resource "aws_wafv2_web_acl" "waf_acl_lb" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+        rule_action_override {
+          action_to_use {
+            allow {}
+          }
+
+          name = "SizeRestrictions_BODY"
+        }
       }
     }
 
