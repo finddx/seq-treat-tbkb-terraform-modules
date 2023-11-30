@@ -3,8 +3,8 @@ resource "aws_ecs_task_definition" "task_definition" {
   family                   = each.key
   requires_compatibilities = lookup(each.value, "requires_compatibilities", ["FARGATE"])
   network_mode             = "awsvpc"
-  cpu                      = lookup(each.value,"cpu")
-  memory                   = lookup(each.value,"memory")
+  cpu                      = lookup(each.value, "cpu")
+  memory                   = lookup(each.value, "memory")
   execution_role_arn       = lookup(each.value, "execution_role_arn")
   task_role_arn            = each.value["task_role_arn"]
 
@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     [{
       portMappings   = lookup(each.value, "port_mappings", [])
       cpu            = lookup(each.value, "cpu")
-      memory                   = lookup(each.value,"memory")
+      memory         = lookup(each.value, "memory")
       image          = "${each.value["container_repo"]}:${each.value["container_tag"]}"
       essential      = true
       name           = each.key
@@ -78,9 +78,9 @@ resource "aws_ecs_task_definition" "task_definition" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/${each.key}"
+          awslogs-group         = "${each.value["log-group"]}"
           awslogs-region        = var.aws_region
-          awslogs-stream-prefix = lookup(each.value, "awslogs-stream-prefix", "ecs")
+          awslogs-stream-prefix = lookup(each.value, "awslogs-stream-prefix", "task")
         }
       }
     }]
