@@ -1,11 +1,14 @@
 locals {
-  prefix = "${var.project_name}-${var.module_name}-${var.environment}"
+  prefix = "${var.environment}-${var.module_name}-${var.project_name}"
 }
 
 resource "aws_s3_bucket" "default" {
   for_each      = var.s3_buckets
-  bucket        = "${local.prefix}-${each.key}"
+  bucket_prefix = substr(format("%s-%s", each.key, local.prefix), 0, 37)
   force_destroy = lookup(each.value, "force_destroy", false)
+  tags = {
+    Usage = each.key
+  }
 }
 
 
