@@ -8,8 +8,8 @@ resource "aws_batch_job_definition" "this" {
   container_properties = jsonencode({
     image            = lookup(each.value, "image")
     command          = lookup(each.value, "command")
-    jobRoleArn       = lookup(each.value, "jobRoleArn")
-    executionRoleArn = lookup(each.value, "jobRoleArn")
+    jobRoleArn       = lookup(each.value, "taskRoleArn")
+    executionRoleArn = lookup(each.value, "executionRoleArn")
     resourceRequirements = [
       {
         type  = "VCPU",
@@ -22,6 +22,12 @@ resource "aws_batch_job_definition" "this" {
     ]
     networkConfiguration = {
       assignPublicIp = lookup(each.value, "assignPublicIp", "DISABLED")
+    }
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        "awslogs-group" = format("/aws/batch/job/%s", each.key)
+      }
     }
   })
 
