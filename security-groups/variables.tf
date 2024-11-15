@@ -44,6 +44,7 @@ variable "sg_rules_egress" {
   type = map(object({
     security_group_id             = string,
     destination_security_group_id = string,
+    prefix_list_id                = string,
     protocol                      = string,
     from_port                     = number,
     to_port                       = number,
