@@ -289,6 +289,10 @@ resource "aws_cloudfront_distribution" "this" {
       origin_read_timeout      = 60
       origin_keepalive_timeout = 60
     }
+    custom_header {
+      name  = "X-custom-header"
+      value = var.custom_header_value
+    }
   }
 
   # If there is a 404, return index.html with a HTTP 200 Response

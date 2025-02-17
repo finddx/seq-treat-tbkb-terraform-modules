@@ -11,3 +11,5 @@ variable "restrictions" {
 variable "project_name" {}
 variable "environment" {}
 variable "module_name" {}
+
+variable "custom_header_value" {}
