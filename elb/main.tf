@@ -119,8 +119,12 @@ resource "aws_lb_listener" "listeners" {
   certificate_arn   = contains(["HTTPS", "TLS"], lookup(each.value, "protocol", "null")) ? each.value["certificate_arn"] : null
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.tf_target_group[each.value["default_target_group"]].arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Access denied"
+      status_code  = "403"
+    }
   }
 }
 
