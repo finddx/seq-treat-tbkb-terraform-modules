@@ -1,11 +1,8 @@
 data "aws_caller_identity" "current" {}
 
-locals {
-  prefix = "${var.environment}-${var.module_name}-${var.project_name}"
-}
 
 resource "aws_s3_bucket" "static" {
-  bucket_prefix = substr(format("static-files-%s", local.prefix), 0, 37)
+  bucket = var.static_bucket_name
   tags = {
     Usage = "static-files"
   }
@@ -28,7 +25,7 @@ resource "aws_s3_bucket_ownership_controls" "static_owner" {
 }
 
 resource "aws_s3_bucket" "django_static" {
-  bucket_prefix = substr(format("django-static-files-%s", local.prefix), 0, 37)
+  bucket = var.django_static_bucket_name
   tags = {
     Usage = "django-static-files"
   }
@@ -196,7 +193,7 @@ resource "aws_s3_bucket_cors_configuration" "django_static_cors" {
 }
 
 resource "aws_s3_bucket" "logs" {
-  bucket_prefix = substr(format("cloudfront-logs-%s", local.prefix), 0, 37)
+  bucket        = var.logs_bucket_name
   force_destroy = true
   tags = {
     Usage = "cloudfront-logs"
